@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/vendor/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/login.css">
+    <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <title>Login - Admin</title>
+</head>
+
+<body>
+    <div class="container">
+        <div style="margin-top: 60px" class="card card-container">
+            <img id="profile-img" class="profile-img-card" width="150px" height="150px" src="/img/teksmartest.jpeg" />
+            <p id="profile-name" class="text-center profile-name-card">ADMIN</p>
+            <hr/>
+            <% if (feedback) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <%= feedback %>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <% } %>
+                    <% if (err) { %>
+                        <div class="alert alert-success alert-danger fade show" role="alert">
+                            <%= err %>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <% } %>
+                            <form class="form-signin" method="POST" action="/admin/login">
+                                <input name="username" type="text" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+                                <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                            </form>
+                            <!-- /form -->
+        </div>
+        <!-- /card-container -->
+    </div>
+    <!-- /container -->
+</body>
+
+</html>

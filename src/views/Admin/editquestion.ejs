@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="images/favicon.ico">
+    <title>TEK Smartest</title>
+    <!--Fonts-->
+    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <!-- Icons -->
+    <link href="/styles/font-awesome.min.css" rel="stylesheet">
+    <script src="/vendor/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="/vendor/jquery-countdown/css/jquery.countdown.css">
+    <link href="/styles/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="container-fluid" id="wrapper">
+        <div class="row">
+            <nav class="sidebar col-xs-12 col-sm-4 col-lg-3 col-xl-2 bg-faded sidebar-style-1">
+                <h1 class="site-title"><a href="index.html"><em class="fa fa-lightbulb-o"></em> TEK Smartest</a></h1>
+
+                <a href="#menu-toggle" class="btn btn-default" id="menu-toggle"><em class="fa fa-bars"></em></a>
+
+                <ul class="nav nav-pills flex-column sidebar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="/admin"><em class="fa fa-dashboard"></em> Dashboard <span class="sr-only">(current)</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/questions"><em class="fa fa-plus"></em> Add Questions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/view_questions"><em class="fa fa-eye"></em> View Questions</a></li>
+                </ul>
+
+            </nav>
+
+
+            <main class="col-xs-12 col-sm-8 offset-sm-4 col-lg-9 offset-lg-3 col-xl-10 offset-xl-2 pt-3 pl-4">
+                <header class="page-header row justify-center">
+                    <div class="col-md-6 col-lg-8">
+                        <h1 class="float-left text-center text-md-left"> Edit Question</h1>
+                    </div>
+
+                    <div class="dropdown user-dropdown col-md-6 col-lg-4 text-center text-md-right">
+                        <a class="btn btn-stripped dropdown-toggle" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                            <div class="username mt-1">
+                                <h4 class="mb-1">
+                                    Welcome,
+                                    <%= username %>
+                                </h4>
+
+                                <h6 class="text-muted">Admin</h6>
+                            </div>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" style="margin-right: 1.5rem;" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="/admin/logout"><em class="fa fa-power-off mr-1"></em> Logout</a></div>
+                    </div>
+
+                    <div class="clear"></div>
+                </header>
+
+                <section class="row">
+                    <% if (feedback) { %>
+                        <div class="container col-md-6 alert alert-success alert-dismissible fade show" role="alert">
+                            <%= feedback %>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                        </div>
+                        <% } %>
+                            <% if (err) { %>
+                                <div class="container col-md-6 alert alert-danger alert-dismissible fade show" role="alert">
+                                    <%= err %>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                </div>
+                                <% } %>
+                                    <br>
+                                    <div class="container">
+                                        <form action="/admin/editquestion/<%= data._id %>" method="POST">
+                                            <div class="form-group">
+                                                <label for="question">Question</label>
+                                                <textarea name="question" required style="width: 70%" class="form-control" id="" rows="4"><%= data.Question %></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Option 1</label>
+                                                <input value="<%= data.Option1 %>" name="option1" required style="width: 50%" type="text" class="form-control" id="option1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Option 2</label>
+                                                <input value="<%= data.Option2 %>" name="option2" required style="width: 50%" type="text" class="form-control" id="option1">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="">Option 3</label>
+                                                <input value="<%= data.Option3 %>" name="option3" style="width: 50%" type="text" class="form-control" id="option1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Option 4</label>
+                                                <input value="<%= data.Option4 %>" name="option4" style="width: 50%" type="text" class="form-control" id="option1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Correct Answer</label>
+                                                <input value="<%= data.CorrectAnswer %>" name="answer" required style="width: 50%" type="text" class="form-control" id="option1">
+                                                <small class="form-text text-muted">Should be one of the Options provided above</small>
+                                            </div>
+                                            <button style="margin-bottom: 30px" type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src='/socket.io/socket.io.js'></script>
+    <script src="/vendor/popper.min.js"></script>
+    <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/vendor/jquery-countdown/js/jquery.plugin.min.js"></script>
+    <script src="/vendor/jquery-countdown/js/jquery.countdown.min.js"></script>
+    <script src='/js/admin.js'></script>
+</body>
+
+</html>

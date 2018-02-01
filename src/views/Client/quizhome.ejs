@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/vendor/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/jquery-countdown/css/jquery.countdown.css">
+    <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <title>TEK Smartest</title>
+</head>
+
+<body>
+    <header>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="#">TEK Smartest</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul style="color:red; font-weight: bolder; padding-left: 25%" class="navbar-nav mx-auto text-center">
+                    <li style="font-size: 15px" id="timer"></li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <span style="color: white">Contestant : <strong id="contestantName"> <%= name %> </strong></span>
+                    </li>
+            </div>
+        </nav>
+    </header>
+    <br><br>
+    <div style="margin-top: 5%" class="container">
+        <div class="container" id="quizQuestionsArea">
+        </div>
+    </div>
+    <script src='/socket.io/socket.io.js'></script>
+    <script type="text/javascript" src="/vendor/jquery-countdown/js/jquery.plugin.min.js"></script>
+    <script src="/vendor/jquery-countdown/js/jquery.countdown.min.js"></script>
+    <script src="/vendor/jquery.blockUI.js"></script>
+    <script src='/js/client.js'></script>
+
+</body>
+
+</html>
