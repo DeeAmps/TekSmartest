@@ -5,11 +5,44 @@ const adminModel = require("../models/adminSchema");
 const questionModel = require("../models/questionsSchema");
 const router = express.Router();
 const loggedIn = require("../config/authenticate").loggedIn;
-const contestantPointsModel = require("../models/contestantPointsSchema");
+const contestantAnswerModel = require("../models/contestantAnswerSchema");
 
 
 router.get('/', loggedIn, (req, res) => {
     res.render("Admin/home", { username: req.decoded.username })
+});
+
+router.get('/clearpoints', loggedIn, (req, res) => {
+    contestantPointsModel.remove({}, (err) => {
+        return res.render("Admin/home", { username: req.decoded.username })
+    });
+});
+
+router.get('/quiz_report', loggedIn, (req, res) => {
+    contestantAnswerModel.find({}, (err, data) => {
+        let distinctQuestions = {
+            "questions": [],
+            "score": []
+        };
+        data.forEach(element => {
+            var index = distinctQuestions.questions.findIndex(x => x.Question == element.Question);
+            if (index === -1) {
+                let ques = {
+                    "Question": element.Question,
+                    "CorrectAnswer": element.CorrectAnswer
+                }
+                distinctQuestions.questions.push(ques)
+            }
+            distinctQuestions.score.push(element);
+        });
+        res.render("Admin/quiz_report", { username: req.decoded.username, report: distinctQuestions })
+    });
+});
+
+router.get('/clearanswered', loggedIn, (req, res) => {
+    contestantAnswerModel.remove({}, (err) => {
+        return res.render("Admin/home", { username: req.decoded.username })
+    });
 });
 
 router.get('/questions', loggedIn, (req, res) => {
@@ -24,12 +57,34 @@ router.get('/deletequestion/:id', loggedIn, (req, res) => {
     })
 });
 
-router.get('quiz_scores', loggedIn, (req, res) => {
-    contestantPointsModel.find({}, (err, data) => {
+router.get('/quiz_scores', loggedIn, (req, res) => {
+
+    contestantAnswerModel.find({}, (err, data) => {
+        let distinctQuestions = {
+            "contestants": []
+        };
+        data.forEach(element => {
+            var index = distinctQuestions.contestants.findIndex(x => x.Name == element.Name);
+            if (index === -1) {
+                let constestant = {
+                    "Name": element.Name,
+                    "Score": 0
+                }
+                distinctQuestions.contestants.push(constestant)
+            }
+
+        });
+        for (let index = 0; index < distinctQuestions.contestants.length; index++) {
+            data.forEach(element => {
+                if (element.ChosenAnswer == element.CorrectAnswer && element.Name == distinctQuestions.contestants[index].Name) {
+                    distinctQuestions.contestants.find(x => x.Name == element.Name).Score += 1
+                }
+            });
+        }
         questionModel.count({}, (err, count) => {
-            res.render("Admin/quiz_scores", { username: req.decoded.username, scores: data, totalCount: count })
+            res.render("Admin/quiz_scores", { username: req.decoded.username, scores: distinctQuestions.contestants, totalCount: count })
         })
-    })
+    });
 });
 
 router.get('/editquestion/:id', loggedIn, (req, res) => {
@@ -48,7 +103,7 @@ router.post('/editquestion/:id', loggedIn, (req, res) => {
         let option3 = req.body.option3;
         let option4 = req.body.option4;
         let answer = req.body.answer;
-        console.log(data);
+
         data.Question = question;
         data.Option1 = option1;
         data.Option2 = option2;
@@ -60,8 +115,6 @@ router.post('/editquestion/:id', loggedIn, (req, res) => {
                 res.render("Admin/viewquestions", { username: req.decoded.username, questions: data });
             })
         });
-
-
     });
 
 });

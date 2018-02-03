@@ -32,15 +32,14 @@
                     <li class="nav-item"><a class="nav-link" href="/admin/questions"><em class="fa fa-plus"></em> Add Questions</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/view_questions"><em class="fa fa-eye"></em> View Questions</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/quiz_scores"><em class="fa fa-bar-chart"></em> View Scores</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/admin/quiz_report"><em class="fa fa-clipboard"></em> Score Report</a></li>
                 </ul>
 
-                <a style="color: white" id="beginShow" class="logout-button"><em class="fa fa-play"></em> Let's Play!</a></nav>
+            </nav>
 
             <main class="col-xs-12 col-sm-8 offset-sm-4 col-lg-9 offset-lg-3 col-xl-10 offset-xl-2 pt-3 pl-4">
                 <header class="page-header row justify-center">
                     <div class="col-md-6 col-lg-8">
-                        <h1 class="float-left text-center text-md-left"> Dashboard</h1>
+                        <h1 class="float-left text-center text-md-left"> Score Report</h1>
                     </div>
 
                     <div class="dropdown user-dropdown col-md-6 col-lg-4 text-center text-md-right">
@@ -68,27 +67,29 @@
 
                 <section class="row">
                     <div class="col-sm-12">
-                        <section class="row">
-                            <div class="col-md-12 col-lg-6">
-                                <div class="card mb-4">
-                                    <div id="actConstests" class="card-block">
-                                        <h3 style="padding-left: 25px; padding-top: 25px" class="card-title">Quiz Contestants</h3>
-
-                                        <h6 style="padding-left: 30px" class="card-subtitle mb-2 text-muted">Active Participants</h6>
-
-                                    </div>
+                        <% report.questions.forEach(function(reprt, i) { %>
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="badge badge-primary"><%= i + 1 %></span>
+                                    <%= reprt.Question %>
                                 </div>
-                            </div>
-                            <div class="col-lg-6 mb-6">
-                                <div class="card">
-                                    <div class="card-header text-center">QUIZ TIMER</div>
-
-                                    <div style="font-size: 40px" id="timer" class="card-block text-center">
-                                        <p></p>
-                                    </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <ul>
+                                            <% report.score.forEach(function(repr, i) { %>
+                                                <% if (reprt.Question === repr.Question) { %>
+                                                    <li>
+                                                        <%= repr.Name %> - <strong><%= repr.ChosenAnswer %></strong></li>
+                                                    <% }; %>
+                                                        <% }); %>
+                                        </ul>
+                                    </p>
                                 </div>
+                                <div style="color: white" class="card-footer bg-success">Correct Answer - <strong><%= reprt.CorrectAnswer %></strong></div>
+
                             </div>
-                        </section>
+                            <br>
+                            <% }); %>
                     </div>
                 </section>
             </main>

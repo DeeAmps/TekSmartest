@@ -56,12 +56,12 @@ socket.on('connect', function() {
 
     socket.on("EndQuiz", function() {
         $('#timer').countdown('destroy');
-        $.unblockUI({ message: '<h2>QUIZ COMPLETED. Please Wait...</h2>', css: { backgroundColor: '#f00', color: '#fff' } });
+        $.blockUI({ message: '<h2>QUIZ COMPLETED. Please Wait...</h2>', css: { backgroundColor: '#f00', color: '#fff' } });
     });
 
     socket.on("TimerUpEndQuiz", function() {
         $('#timer').countdown('destroy');
-        $.unblockUI({ message: '<h2>TIME UP!</h2>', css: { backgroundColor: '#f00', color: '#fff' } });
+        $.blockUI({ message: '<h2>TIME UP!</h2>', css: { backgroundColor: '#f00', color: '#fff' } });
     });
 });
 
@@ -69,11 +69,12 @@ function SubmitClicked() {
     $("#questSub").prop('disabled', true);
     $("#questSub").removeClass("btn btn-success btn-lg");
     $("#questSub").addClass("btn btn-danger btn-lg");
+    $('#timer').countdown('destroy');
     $("#questSub").text("Please Wait..");
     $.blockUI({ message: '<h2>Submitting...</h2>', css: { backgroundColor: '#f00', color: '#fff' } });
     var contestantName = getParameterByName("name");
     socket.emit("QuizSubmission", { answers: answers, name: contestantName, count: count });
-
+    answers = [];
 }
 
 function Selected(id, chosen) {

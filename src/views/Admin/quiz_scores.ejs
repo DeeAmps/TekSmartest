@@ -23,14 +23,16 @@
     <div class="container-fluid" id="wrapper">
         <div class="row">
             <nav class="sidebar col-xs-12 col-sm-4 col-lg-3 col-xl-2 bg-faded sidebar-style-1">
-                <h1 class="site-title"><a href="index.html"><em class="fa fa-lightbulb-o"></em> TEK Smartest</a></h1>
-
+                <h1 class="site-title"><a href="/admin"><em class="fa fa-lightbulb-o"></em> Revelio</a></h1>
+                <hr style="background-color: white;" />
                 <a href="#menu-toggle" class="btn btn-default" id="menu-toggle"><em class="fa fa-bars"></em></a>
 
                 <ul class="nav nav-pills flex-column sidebar-nav">
                     <li class="nav-item"><a class="nav-link active" href="/admin"><em class="fa fa-dashboard"></em> Dashboard <span class="sr-only">(current)</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/questions"><em class="fa fa-plus"></em> Add Questions</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/view_questions"><em class="fa fa-eye"></em> View Questions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/quiz_report"><em class="fa fa-clipboard"></em> Score Report</a></li>
+
                 </ul>
             </nav>
 
@@ -54,14 +56,18 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" style="margin-right: 1.5rem;" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="/admin/logout"><em class="fa fa-power-off mr-1"></em> Logout</a></div>
+                            <a class="dropdown-item" href="/admin/logout"><em class="fa fa-power-off mr-1"></em> Logout</a>
+                            <a class="dropdown-item" href="/admin/clearanswered"><em class="fa fa-ban mr-1"></em> Clear Answered</a>
+
+                        </div>
+
                     </div>
 
                     <div class="clear"></div>
                 </header>
 
                 <section class="row">
-                    <table class="table table-hover table-bordered">
+                    <table style="width: 98%" class="table table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center">Name</th>
@@ -75,7 +81,7 @@
                                         <%= score.Name %>
                                     </th>
                                     <td>
-                                        <%= score.TotalPoints %> /
+                                        <%= score.Score %> /
                                             <%= totalCount %>
                                     </td>
                                 </tr>

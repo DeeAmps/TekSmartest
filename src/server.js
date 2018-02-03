@@ -10,7 +10,7 @@ const cors = require("cors");
 const clientRoute = require("./routes/clientRoute");
 const adminRoute = require("./routes/adminRoute");
 const questionModel = require("./models/questionsSchema");
-const contestantPointsModel = require("./models/contestantPointsSchema");
+const contestantAnswerModel = require("./models/contestantAnswerSchema");
 
 
 mongoose.connect("mongodb://localhost:27017/TEKSmartest", (err) => {
@@ -21,8 +21,6 @@ mongoose.connect("mongodb://localhost:27017/TEKSmartest", (err) => {
     console.log("Connection Success!");
 });
 
-
-let totalPoints = 0;
 
 const app = express();
 const server = require('http').createServer(app);
@@ -59,61 +57,45 @@ io.on('connection', (socket) => {
     });
 
     socket.on('EndQuizForAll', () => {
-        socket.broadcast.emit('TimerUpEndQuiz');
+        io.emit('TimerUpEndQuiz');
     });
 
     socket.on('QuizSubmission', (obj) => {
         GetPoints(obj).then(res => {
-            contestantPointsModel.findOne({ Name: obj.name }, (err, points) => {
+            questionModel.find({}).limit(5).skip(obj.count).exec((err, results) => {
                 if (err) {
                     console.log(err);
                     process.exit(1);
                 }
-                if (points != null) {
-                    points.TotalPoints += res;
-                    points.save((err) => {
-                        if (err) {
-                            console.log(err);
-                            process.exit(1);
-                        }
-                        questionModel.find({}).limit(5).skip(obj.count).exec((err, results) => {
-                            if (err) console.log(err);
-                            io.emit('QuizQuestions', { questions: results, count: obj.count + 5 });
-                        })
-                    });
+                if (results == null) {
+                    socket.emit('QuizEnd');
                 } else {
-                    let points = new contestantPointsModel();
-                    points.Name = obj.name;
-                    points.TotalPoints = res;
-                    points.save((err) => {
-                        if (err) {
-                            console.log(err);
-                            process.exit(1);
-                        }
-                        questionModel.find({}).limit(5).skip(obj.count).exec((err, results) => {
-                            if (err) console.log(err);
-                            if (results == null) {
-                                io.emit('QuizEnd');
-                            } else {
-                                io.emit('QuizQuestions', { questions: results, count: obj.count + 5 });
-                            }
-                        })
-                    })
+                    socket.emit('QuizQuestions', { questions: results, count: obj.count + 5 });
                 }
-            });
+            })
         });
-    })
+    });
 });
 
 async function GetPoints(obj) {
     for (const element of obj.answers) {
         await questionModel.findOne({ "_id": element.QuestionId }, (err, results) => {
-            if (element.SelectedAnswer == results.CorrectAnswer) {
-                totalPoints += 1;
-            }
+            let answered = new contestantAnswerModel();
+
+            answered.Question = results.Question;
+            answered.Name = obj.name;
+            answered.ChosenAnswer = element.SelectedAnswer;;
+            answered.CorrectAnswer = results.CorrectAnswer;
+
+            answered.save((err) => {
+                if (err) {
+                    console.log(err);
+                    process.exit(1);
+                }
+            });
         })
     }
-    return totalPoints;
+    return 1;
 }
 
 server.listen(3000, () => {

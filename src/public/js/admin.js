@@ -2,6 +2,7 @@
 
 var socket = io.connect('http://localhost:3000');
 var connected = false;
+var minutes;
 
 socket.on('connect', function() {
     socket.on('activeContestants', function(obj) {
@@ -21,7 +22,7 @@ socket.on('connect', function() {
     });
 
     socket.on('QuizStarted', function() {
-        $("#timer").countdown({ until: '+15m', compact: true, onExpiry: EndQuiz, format: 'M:S' });
+        $("#timer").countdown({ until: `+${minutes}m`, compact: true, onExpiry: EndQuiz, format: 'M:S' });
         $.blockUI({ message: '<h2>Quiz in Progress</h2>', css: { backgroundColor: '#f00', color: '#fff' } });
     })
 });
@@ -32,11 +33,12 @@ function EndQuiz() {
 }
 
 $("#beginShow").click(function() {
-    // $(this).text("Quiz In Progress..");
-    // $(this).removeClass('btn-success');
-    // $(this).addClass('btn-danger');
-    $(this).prop('disabled', true);
-    socket.emit('StartQuiz');
+    minutes = prompt("How long should the quiz run for?");
+    if (minutes) {
+        $(this).prop('disabled', true);
+        socket.emit('StartQuiz');
+    }
+
 });
 
 $(".deletebutton").click(function() {
